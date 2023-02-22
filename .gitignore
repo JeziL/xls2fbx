@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Environments
+Include/
+Lib/
+Scripts/
+*.cfg
+
+# User
+Data/
