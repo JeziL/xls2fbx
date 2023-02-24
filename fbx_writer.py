@@ -99,7 +99,7 @@ def write_ECU(xml, ecu):
 
     # 添加本 ECU 分别向两个 Channel 的 Connector
     cncts = ecu_node.find(".//fx:CONNECTORS", namespaces=NS)
-    wakeup_channel = 1 if ecu.channels[1] else 0 # 若同时连接双通道，则 B 通道为唤醒通道
+    wakeup_channel = 1 if ecu.channels[1] else 0  # 若同时连接双通道，则 B 通道为唤醒通道
     for ch_no in range(2):
         if not ecu.channels[ch_no]:
             continue
@@ -109,7 +109,7 @@ def write_ECU(xml, ecu):
             E.OUTPUTS(),
             getattr(E_FLR, "WAKE-UP-CHANNEL")(
                 "true" if ch_no == wakeup_channel else "false"
-            ),  
+            ),
             ID=assign_fbx_id("Connector"),
         )
         # 添加本 ECU 下所有帧的时序引用
