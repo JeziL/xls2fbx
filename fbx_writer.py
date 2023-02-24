@@ -62,8 +62,9 @@ def write_ECU(xml, ecu):
             ID=frame.ft_fbx_id,
         )
         channel_fts = xml.xpath("//fx:FRAME-TRIGGERINGS", namespaces=NS)
-        for channel_ft in channel_fts:
-            channel_ft.insert(0, deepcopy(ft))
+        for ch_no, channel_ft in enumerate(channel_fts):
+            if frame.channels[ch_no]:
+                channel_ft.insert(0, deepcopy(ft))
 
     # 分配节点 ID、控制参数 ID
     ecu.fbx_id = assign_fbx_id("ECU")
@@ -98,19 +99,24 @@ def write_ECU(xml, ecu):
 
     # 添加本 ECU 分别向两个 Channel 的 Connector
     cncts = ecu_node.find(".//fx:CONNECTORS", namespaces=NS)
+    wakeup_channel = 1 if ecu.channels[1] else 0 # 若同时连接双通道，则 B 通道为唤醒通道
     for ch_no in range(2):
+        if not ecu.channels[ch_no]:
+            continue
         cnct = E.CONNECTOR(
             getattr(E, "CHANNEL-REF")({"ID-REF": f"Channel_{ch_no + 1}"}),
             getattr(E, "CONTROLLER-REF")({"ID-REF": ecu.ctrl_fbx_id}),
             E.OUTPUTS(),
             getattr(E_FLR, "WAKE-UP-CHANNEL")(
-                "true" if ch_no == 1 else "false"
-            ),  # B 通道为唤醒通道
+                "true" if ch_no == wakeup_channel else "false"
+            ),  
             ID=assign_fbx_id("Connector"),
         )
         # 添加本 ECU 下所有帧的时序引用
         outputs = cnct.find(".//fx:OUTPUTS", namespaces=NS)
         for frame in ecu.frames:
+            if not frame.channels[ch_no]:
+                continue
             op = etree.SubElement(
                 outputs,
                 etree.QName(NS["fx"], "OUTPUT-PORT"),

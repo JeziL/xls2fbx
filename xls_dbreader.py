@@ -59,6 +59,7 @@ class Frame:
         self.is_startup = False
         self.fbx_id = ""
         self.ft_fbx_id = ""
+        self.channels = [True, True]
 
     def read_signals(self, worksheet):
         """解析帧内包含的所有字段"""
@@ -101,8 +102,7 @@ class ECU:
     def __init__(self, name, desc, channel_A, channel_B) -> None:
         self.name = name
         self.desc = desc
-        self.channel_A = channel_A
-        self.channel_B = channel_B
+        self.channels = [channel_A, channel_B]
         self.frames = []
         self.fbx_id = ""
         self.ctrl_fbx_id = ""
@@ -157,6 +157,7 @@ class XLSDatabase:
         frame.base_cycle = worksheet["F2"].value
         frame.cycle_rep = worksheet["H2"].value
         frame.is_startup = worksheet["J1"].value.strip() == "是"
+        frame.channels = ["A" in worksheet["J2"].value, "B" in worksheet["J2"].value]
 
         frame.read_signals(worksheet)
         target_ecu.frames.append(frame)
