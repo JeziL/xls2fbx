@@ -65,8 +65,10 @@ class Frame:
         for row in worksheet.iter_rows(min_row=5, max_col=8, max_row=100):
             if not row[0].value:
                 break
-            bit_offset, start_byte = modf(row[3].value)
+            bit_offset, start_byte = modf(float(row[3].value))
             start_bit = int(start_byte) * 8 + round(bit_offset * 10)
+            if row[4].value > 8:
+                start_bit = (start_bit + row[4].value - 1) // 8 * 8
             signal = Signal(
                 row[0].value,
                 row[1].value,
