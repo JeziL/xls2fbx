@@ -68,8 +68,8 @@ class Frame:
                 break
             bit_offset, start_byte = modf(float(row[3].value))
             start_bit = int(start_byte) * 8 + round(bit_offset * 10)
-            if row[4].value > 8:
-                start_bit = (start_bit + row[4].value - 1) // 8 * 8
+            if int(row[4].value) > 8:
+                start_bit = (start_bit + int(row[4].value) - 1) // 8 * 8
             signal = Signal(
                 row[0].value,
                 row[1].value,
