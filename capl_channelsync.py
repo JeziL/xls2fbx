@@ -28,7 +28,7 @@ on signal {frame.name}_Ch_A::{signal.name} {{
 }}
 """
                     )
-                    if signal.name.split("_")[-1] == "COUNT":
+                    if signal.desc == "节点通信状态":
                         f.write(
 f"""
 on frFrame {frame.name}_Ch_A {{
