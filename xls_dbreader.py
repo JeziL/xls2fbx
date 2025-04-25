@@ -71,9 +71,9 @@ class Frame:
             if int(row[4].value) > 8:
                 start_bit = (start_bit + int(row[4].value) - 1) // 8 * 8
             signal = Signal(
-                row[0].value,
-                row[1].value,
-                row[2].value,
+                row[0].value.strip(),
+                row[1].value.strip(),
+                row[2].value.strip(),
                 start_bit,
                 row[4].value,
             )
